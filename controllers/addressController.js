@@ -1,14 +1,10 @@
 import Address from "../model/Address.js";
 
-// ========================================
-// ADD ADDRESS
-// ========================================
 
+// ADD ADDRESS
 export const addAddress = async (req, res, next) => {
   try {
-    console.log("USER DATA:", req.userData);
-    console.log("ADDRESS BODY:", req.body);
-
+  
     const userId = req.userData.userId;
 
     const {
@@ -47,8 +43,7 @@ export const addAddress = async (req, res, next) => {
       pincode,
     });
 
-    console.log("ADDRESS CREATED:", address);
-
+ 
     return res.status(201).json({
       success: true,
       message: "Address added successfully",
@@ -63,12 +58,7 @@ export const addAddress = async (req, res, next) => {
     });
   }
 };
-
-
-// ========================================
 // GET USER ADDRESSES
-// ========================================
-
 export const getAddresses = async (req, res) => {
   try {
     const userId = req.userData.userId;
@@ -93,10 +83,7 @@ export const getAddresses = async (req, res) => {
   }
 };
 
-
-// ========================================
 // UPDATE ADDRESS
-// ========================================
 
 export const updateAddress = async (req, res) => {
   try {
@@ -139,10 +126,7 @@ export const updateAddress = async (req, res) => {
   }
 };
 
-
-// ========================================
 // DELETE ADDRESS
-// ========================================
 
 export const deleteAddress = async (req, res) => {
   try {

@@ -1,20 +1,11 @@
-
 import { body, validationResult } from "express-validator";
 
-// ========================================
 // SIGNUP VALIDATION
-// ========================================
 
 export const signupValidation = [
-  body("firstName")
-    .trim()
-    .notEmpty()
-    .withMessage("First name is required"),
+  body("firstName").trim().notEmpty().withMessage("First name is required"),
 
-  body("lastName")
-    .trim()
-    .notEmpty()
-    .withMessage("Last name is required"),
+  body("lastName").trim().notEmpty().withMessage("Last name is required"),
 
   body("email")
     .trim()
@@ -40,9 +31,7 @@ export const signupValidation = [
     .withMessage("Invalid user role"),
 ];
 
-// ========================================
 // LOGIN VALIDATION
-// ========================================
 
 export const loginValidation = [
   body("email")
@@ -62,9 +51,7 @@ export const loginValidation = [
     .withMessage("Password must be a string"),
 ];
 
-// ========================================
 // ADD PRODUCT VALIDATION
-// ========================================
 
 export const productValidation = [
   body("name")
@@ -112,9 +99,7 @@ export const productValidation = [
     .withMessage("Image must be a valid URL"),
 ];
 
-// ========================================
 // ADDRESS VALIDATION
-// ========================================
 
 export const addressValidation = [
   body("fullName")
@@ -176,9 +161,7 @@ export const addressValidation = [
     .withMessage("PIN code must contain exactly 6 digits"),
 ];
 
-// ========================================
 // VALIDATE REQUEST MIDDLEWARE
-// ========================================
 
 export const validateRequest = (req, res, next) => {
   const errors = validationResult(req);

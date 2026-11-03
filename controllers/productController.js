@@ -1,7 +1,6 @@
 import Product from "../model/product.js";
 import HttpError from "../helpers/HttpError.js";
 
-
 // ADD PRODUCT
 export const addProduct = async (
   req,
@@ -83,7 +82,6 @@ export const addProduct = async (
         )
       );
     }
-
     // Create product
     const product =
       new Product({
@@ -137,24 +135,17 @@ export const addProduct = async (
   }
 };
 
-// ========================================
 // GET ALL PRODUCTS
-// ========================================
-// PUBLIC ROUTE
-//
+
 // Logged out:
 //   Shows all products
-//
 // Normal user:
 //   Shows all products
-//
 // Seller:
 //   Hides seller's own products
 //   Shows other sellers' products
-//
 // Newly added products first
 // Pagination
-// ========================================
 
 export const getProducts = async (
   req,
@@ -162,9 +153,8 @@ export const getProducts = async (
   next
 ) => {
   try {
-    // ========================================
     // PAGINATION
-    // ========================================
+
 
     const page = Math.max(
       parseInt(req.query.page) || 1,
@@ -179,17 +169,13 @@ export const getProducts = async (
     const skip =
       (page - 1) * limit;
 
-    // ========================================
     // BASE QUERY
-    // ========================================
 
     const query = {
       isDeleted: false,
     };
 
-    // ========================================
     // HIDE SELLER'S OWN PRODUCTS
-    // ========================================
 
     if (
       req.userData &&
@@ -203,19 +189,15 @@ export const getProducts = async (
       };
     }
 
-    // ========================================
     // COUNT
-    // ========================================
 
     const totalProducts =
       await Product.countDocuments(
         query
       );
 
-    // ========================================
     // GET PRODUCTS
     // NEWEST FIRST
-    // ========================================
 
     const products =
       await Product.find(query)
@@ -229,18 +211,14 @@ export const getProducts = async (
         .skip(skip)
         .limit(limit);
 
-    // ========================================
     // TOTAL PAGES
-    // ========================================
 
     const totalPages =
       Math.ceil(
         totalProducts / limit
       );
 
-    // ========================================
     // RESPONSE
-    // ========================================
 
     return res.status(200).json({
       success: true,
@@ -277,13 +255,7 @@ export const getProducts = async (
     );
   }
 };
-
-// ========================================
 // GET SINGLE PRODUCT
-// ========================================
-// PUBLIC
-// ========================================
-
 export const getProduct = async (
   req,
   res,
@@ -335,13 +307,10 @@ export const getProduct = async (
   }
 };
 
-// ========================================
 // GET SELLER PRODUCTS
-// ========================================
 // Seller Dashboard
 //
 // Shows ONLY current seller's products
-// ========================================
 
 export const getSellerProducts =
   async (
@@ -413,9 +382,7 @@ export const getSellerProducts =
     }
   };
 
-// ========================================
 // UPDATE PRODUCT
-// ========================================
 
 export const updateProduct =
   async (
@@ -476,9 +443,7 @@ export const updateProduct =
         );
       }
 
-      // ========================================
       // OWNERSHIP CHECK
-      // ========================================
 
       if (
         !product.userId ||
@@ -493,9 +458,7 @@ export const updateProduct =
         );
       }
 
-      // ========================================
       // PRICE VALIDATION
-      // ========================================
 
       if (
         price !== undefined
@@ -516,9 +479,7 @@ export const updateProduct =
           Number(price);
       }
 
-      // ========================================
       // NAME
-      // ========================================
 
       if (
         name !== undefined
@@ -538,9 +499,7 @@ export const updateProduct =
           name.trim();
       }
 
-      // ========================================
       // DESCRIPTION
-      // ========================================
 
       if (
         description !==
@@ -561,9 +520,7 @@ export const updateProduct =
           description.trim();
       }
 
-      // ========================================
       // CATEGORY
-      // ========================================
 
       if (
         category !== undefined
@@ -582,10 +539,7 @@ export const updateProduct =
         product.category =
           category.trim();
       }
-
-      // ========================================
       // IMAGE
-      // ========================================
 
       if (
         image !== undefined
@@ -594,9 +548,7 @@ export const updateProduct =
           image;
       }
 
-      // ========================================
       // STOCK
-      // ========================================
 
       if (
         stock !== undefined
@@ -617,10 +569,7 @@ export const updateProduct =
           Number(stock);
       }
 
-      // ========================================
       // SAVE
-      // ========================================
-
       await product.save();
 
       return res.status(200).json({
@@ -646,13 +595,9 @@ export const updateProduct =
       );
     }
   };
+  // DELETE PRODUCT
 
-// ========================================
-// DELETE PRODUCT
-// ========================================
 // SOFT DELETE
-// ========================================
-
 export const deleteProduct =
   async (
     req,
@@ -690,9 +635,7 @@ export const deleteProduct =
         );
       }
 
-      // ========================================
       // ADMIN
-      // ========================================
 
       if (
         req.userData.userRole ===
@@ -710,10 +653,7 @@ export const deleteProduct =
             "Product deleted successfully",
         });
       }
-
-      // ========================================
       // SELLER
-      // ========================================
 
       if (
         req.userData.userRole ===
@@ -733,9 +673,7 @@ export const deleteProduct =
           );
         }
 
-        // ========================================
         // SOFT DELETE
-        // ========================================
 
         product.isDeleted =
           true;
@@ -749,10 +687,7 @@ export const deleteProduct =
             "Product deleted successfully",
         });
       }
-
-      // ========================================
       // NORMAL USER
-      // ========================================
 
       return next(
         new HttpError(

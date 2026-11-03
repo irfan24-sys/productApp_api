@@ -4,9 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import HttpError from "../helpers/HttpError.js";
 
-// =====================================
 // USER REGISTER
-// =====================================
 
 export const userRegister = async (req, res, next) => {
   try {
@@ -104,10 +102,7 @@ export const userRegister = async (req, res, next) => {
   }
 };
 
-
-// =====================================
 // USER LOGIN
-// =====================================
 
 export const userLogin = async (req, res, next) => {
   try {

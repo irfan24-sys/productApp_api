@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 import Product from "../model/product.js";
 import OrderSummary from "../model/OrderSummary.js";
 
-// ========================================
 // PLACE ORDER
-// POST /api/order/place-order
-// ========================================
 
 export const placeOrder = async (req, res) => {
   try {
@@ -136,7 +133,6 @@ export const placeOrder = async (req, res) => {
           message: `Invalid price for ${product.name}`,
         });
       }
-
       const subtotal = price * item.quantity;
       totalAmount += subtotal;
 
@@ -154,7 +150,6 @@ export const placeOrder = async (req, res) => {
         subtotal,
       });
     }
-
     // Create the order
     const order = await OrderSummary.create({
       userId,
@@ -189,10 +184,7 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-// ========================================
 // GET LOGGED-IN CUSTOMER'S ORDERS
-// GET /api/order/my-orders
-// ========================================
 
 export const getMyOrders = async (req, res) => {
   try {
@@ -225,10 +217,8 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-// ========================================
 // GET LOGGED-IN SELLER'S ORDERS
 // GET /api/order/seller-orders
-// ========================================
 
 export const getSellerOrders = async (req, res) => {
   try {

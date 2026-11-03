@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema(
@@ -17,7 +16,7 @@ const orderItemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
+
     category: {
       type: String,
       default: "",
@@ -38,7 +37,7 @@ const orderItemSchema = new mongoose.Schema(
       min: 0,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const deliveryAddressSchema = new mongoose.Schema(
@@ -51,7 +50,7 @@ const deliveryAddressSchema = new mongoose.Schema(
     state: { type: String, required: true },
     pincode: { type: String, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const orderSummarySchema = new mongoose.Schema(
@@ -111,10 +110,7 @@ const orderSummarySchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: "Ordersummary",
-  }
+  },
 );
 
-export default mongoose.model(
-  "OrderSummary",
-  orderSummarySchema
-);
+export default mongoose.model("OrderSummary", orderSummarySchema);

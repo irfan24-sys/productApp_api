@@ -10,7 +10,6 @@ dotenv.config();
 
 const app = express();
 
-
 // ========================================
 // MIDDLEWARE
 // ========================================
@@ -19,98 +18,48 @@ app.use(cors());
 
 app.use(express.json());
 
-
 // ========================================
 // ROUTES
 // ========================================
 
-app.use(
-  "/api/auth",
-  authRoutes
-);
+app.use("/api/auth", authRoutes);
 
-app.use(
-  "/api/product",
-  productRoutes
-);
-app.use(
-  "/api/address",
-  addressRoutes
-);
+app.use("/api/product", productRoutes);
+app.use("/api/address", addressRoutes);
 app.use("/api/order", orderRoutes);
-// ========================================
 // ERROR HANDLING
-// ========================================
 
-app.use(
-  (error, req, res, next) => {
+app.use((error, req, res, next) => {
+  console.error("ERROR:", error);
 
-    console.error(
-      "ERROR:",
-      error
-    );
+  res.status(error.code || 500).json({
+    success: false,
 
-    res.status(
-      error.code || 500
-    ).json({
+    message: error.message || "Something went wrong",
+  });
+});
 
-      success: false,
-
-      message:
-        error.message ||
-        "Something went wrong",
-
-    });
-
-  }
-);
-
-
-// ========================================
 // START SERVER
-// ========================================
 
-const PORT =
-  process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
+const startServer = async () => {
+  try {
+    // Connect MongoDB first
+    await connectDB();
 
-const startServer =
-  async () => {
+    console.log("MongoDB connected successfully");
 
-    try {
+    // Start server only
+    // after MongoDB connects
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("MongoDB connection error:", error.message);
 
-      // Connect MongoDB first
-      await connectDB();
-
-      console.log(
-        "MongoDB connected successfully"
-      );
-
-
-      // Start server only
-      // after MongoDB connects
-      app.listen(
-        PORT,
-        () => {
-
-          console.log(
-            `Server is running on port ${PORT}`
-          );
-
-        }
-      );
-
-    } catch (error) {
-
-      console.error(
-        "MongoDB connection error:",
-        error.message
-      );
-
-      process.exit(1);
-    }
-
-  };
-
+    process.exit(1);
+  }
+};
 
 startServer();
