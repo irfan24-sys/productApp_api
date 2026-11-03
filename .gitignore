@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+jspm_packages/
+.pnp
+.pnp.js
+
+# Environment variables & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build & Dist output (TypeScript / Babel)
+dist/
+build/
+out/
+
+# Uploads / Media storage (local file uploads)
+uploads/
+public/uploads/
+
+# Coverage directory (Jest / Mocha)
+coverage/
+*.lcov
+.nyc_output
+
+# IDEs & Editors
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.sw?
+
+# System files
+.DS_Store
+Thumbs.db
