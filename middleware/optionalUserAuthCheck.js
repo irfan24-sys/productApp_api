@@ -11,10 +11,7 @@ const optionalUserAuthCheck = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    // NO TOKEN
-
-    // This is allowed because this middleware
-    // is OPTIONAL.
+    // NO TOKEN PROVIDED
 
     if (!authHeader) {
       req.userData = null;
@@ -60,9 +57,6 @@ const optionalUserAuthCheck = async (req, res, next) => {
     next();
   } catch (error) {
     // INVALID / EXPIRED TOKEN
-    //
-    // Don't block public product viewing.
-    // Treat the user as logged out.
 
     console.log("Optional authentication:", error.message);
 

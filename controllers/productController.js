@@ -136,17 +136,6 @@ export const addProduct = async (
 };
 
 // GET ALL PRODUCTS
-
-// Logged out:
-//   Shows all products
-// Normal user:
-//   Shows all products
-// Seller:
-//   Hides seller's own products
-//   Shows other sellers' products
-// Newly added products first
-// Pagination
-
 export const getProducts = async (
   req,
   res,
@@ -308,9 +297,6 @@ export const getProduct = async (
 };
 
 // GET SELLER PRODUCTS
-// Seller Dashboard
-//
-// Shows ONLY current seller's products
 
 export const getSellerProducts =
   async (
@@ -596,8 +582,6 @@ export const updateProduct =
     }
   };
   // DELETE PRODUCT
-
-// SOFT DELETE
 export const deleteProduct =
   async (
     req,

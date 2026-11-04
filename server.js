@@ -10,17 +10,13 @@ dotenv.config();
 
 const app = express();
 
-// ========================================
 // MIDDLEWARE
-// ========================================
 
 app.use(cors());
 
 app.use(express.json());
 
-// ========================================
 // ROUTES
-// ========================================
 
 app.use("/api/auth", authRoutes);
 
@@ -45,13 +41,12 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // Connect MongoDB first
+    // Connect MongoDB
     await connectDB();
 
     console.log("MongoDB connected successfully");
 
     // Start server only
-    // after MongoDB connects
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
