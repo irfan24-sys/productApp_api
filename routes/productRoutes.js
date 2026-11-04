@@ -1,4 +1,3 @@
-
 import express from "express";
 
 import {
@@ -11,6 +10,7 @@ import {
 } from "../controllers/productController.js";
 
 import userAuthCheck from "../middleware/userAuhCheck.js";
+import upload from "../middleware/fileUpload.js";
 
 import {
   productValidation,
@@ -19,67 +19,44 @@ import {
 
 const router = express.Router();
 
-// ========================================
 // GET ALL PRODUCTS
-// PUBLIC
-// ========================================
-
 router.get(
   "/getAllProduct",
   getProducts
 );
 
-// ========================================
 // GET SINGLE PRODUCT
-// PUBLIC
-// ========================================
-
 router.get(
   "/getProduct/:id",
   getProduct
 );
 
-// ========================================
 // ADD PRODUCT
-// LOGIN REQUIRED
-// EXPRESS VALIDATION
-// ========================================
-
 router.post(
   "/addProduct",
   userAuthCheck,
+  upload.single("image"),
   productValidation,
   validateRequest,
   addProduct
 );
 
-// ========================================
-// SELLER PRODUCTS
-// LOGIN REQUIRED
-// ========================================
-
+// GET SELLER PRODUCTS
 router.get(
   "/seller-products",
   userAuthCheck,
   getSellerProducts
 );
 
-// ========================================
 // UPDATE PRODUCT
-// LOGIN REQUIRED
-// ========================================
-
 router.put(
   "/updateProduct/:id",
   userAuthCheck,
+  upload.single("image"),
   updateProduct
 );
 
-// ========================================
 // DELETE PRODUCT
-// LOGIN REQUIRED
-// ========================================
-
 router.delete(
   "/deleteProduct/:id",
   userAuthCheck,

@@ -4,7 +4,6 @@ import Product from "../model/product.js";
 import OrderSummary from "../model/OrderSummary.js";
 
 // PLACE ORDER
-
 export const placeOrder = async (req, res) => {
   try {
     const userId = req.userData?.userId;
@@ -16,13 +15,8 @@ export const placeOrder = async (req, res) => {
       });
     }
 
-    const {
-      items,
-      deliveryAddress,
-      paymentMethod,
-    } = req.body;
+    const { items, deliveryAddress, paymentMethod } = req.body;
 
-    // Validate cart items
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
@@ -30,7 +24,6 @@ export const placeOrder = async (req, res) => {
       });
     }
 
-    // Validate delivery address
     if (
       !deliveryAddress ||
       !deliveryAddress.fullName ||
@@ -47,7 +40,6 @@ export const placeOrder = async (req, res) => {
       });
     }
 
-    // Validate payment method
     const validPaymentMethods = [
       "upi",
       "phonepe",
@@ -123,8 +115,7 @@ export const placeOrder = async (req, res) => {
         });
       }
 
-      // Stock validation intentionally omitted.
-      // Always use the database price, not the frontend price.
+      // Always use database price
       const price = Number(product.price);
 
       if (!Number.isFinite(price) || price < 0) {
@@ -133,24 +124,26 @@ export const placeOrder = async (req, res) => {
           message: `Invalid price for ${product.name}`,
         });
       }
+
       const subtotal = price * item.quantity;
       totalAmount += subtotal;
 
       orderItems.push({
         productId: product._id,
-
-        // Important for seller-specific order queries
         sellerId: product.userId,
-
         name: product.name,
+
+        // Save original product image path
         image: product.image || "",
+
         category: product.category || "",
         price,
         quantity: item.quantity,
         subtotal,
       });
     }
-    // Create the order
+
+    // Create order
     const order = await OrderSummary.create({
       userId,
       items: orderItems,
@@ -185,7 +178,6 @@ export const placeOrder = async (req, res) => {
 };
 
 // GET LOGGED-IN CUSTOMER'S ORDERS
-
 export const getMyOrders = async (req, res) => {
   try {
     const userId = req.userData?.userId;
@@ -198,6 +190,10 @@ export const getMyOrders = async (req, res) => {
     }
 
     const orders = await OrderSummary.find({ userId })
+      .populate({
+        path: "items.productId",
+        select: "name image category",
+      })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -218,8 +214,6 @@ export const getMyOrders = async (req, res) => {
 };
 
 // GET LOGGED-IN SELLER'S ORDERS
-// GET /api/order/seller-orders
-
 export const getSellerOrders = async (req, res) => {
   try {
     const sellerId = req.userData?.userId;
@@ -239,14 +233,12 @@ export const getSellerOrders = async (req, res) => {
       });
     }
 
-    // Find orders containing products owned by this seller
     const orders = await OrderSummary.find({
       "items.sellerId": sellerId,
     })
       .sort({ createdAt: -1 })
       .lean();
 
-    // Return only this seller's products from each order
     const sellerOrders = orders.map((order) => {
       const sellerItems = (order.items || []).filter(
         (item) =>
@@ -269,14 +261,8 @@ export const getSellerOrders = async (req, res) => {
         userId: order.userId,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
-
-        // Seller sees only their products
         items: sellerItems,
-
-        // This is the seller's subtotal, not the entire order total
         sellerSubtotal,
-
-        // Order-wide information
         deliveryAddress: order.deliveryAddress,
         paymentMethod: order.paymentMethod,
         paymentStatus: order.paymentStatus,

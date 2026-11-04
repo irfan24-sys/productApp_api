@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema(
@@ -16,7 +17,10 @@ const orderItemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+    image: {
+      type: String,
+      default: "",
+    },
     category: {
       type: String,
       default: "",
@@ -61,7 +65,6 @@ const orderSummarySchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-
     items: {
       type: [orderItemSchema],
       required: true,
@@ -70,30 +73,25 @@ const orderSummarySchema = new mongoose.Schema(
         message: "An order must contain at least one item",
       },
     },
-
     totalAmount: {
       type: Number,
       required: true,
       min: 0,
     },
-
     deliveryAddress: {
       type: deliveryAddressSchema,
       required: true,
     },
-
     paymentMethod: {
       type: String,
       enum: ["upi", "phonepe", "googlepay", "cod"],
       required: true,
     },
-
     paymentStatus: {
       type: String,
       enum: ["pending", "paid", "failed", "refunded"],
       default: "pending",
     },
-
     orderStatus: {
       type: String,
       enum: [
